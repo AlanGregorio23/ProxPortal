@@ -34,8 +34,8 @@ Il progetto nasce come **pannello di accesso semplificato** sopra Proxmox, con l
 
 ### 1. Clona il repository
 ```bash
-git clone https://github.com/tuo-utente/proxportal.git
-cd proxportal
+git clone https://github.com/AlanGregorio23/ProxPortal
+cd ProxPortal
 ````
 
 ### 2. Installa le dipendenze
@@ -82,13 +82,11 @@ PROXMOX_PASSWORD=********
 PROXMOX_REALM=pam
 
 PROXMOX_TEMPLATE=iso:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst
-PROXMOX_STORAGE=local-lvm
+PROXMOX_STORAGE=zpool
 PROXMOX_BRIDGE=vmbr0
 PROXMOX_LXC_USER=root
 PROXMOX_NAMESERVER=8.8.8.8
 ```
-
-⚠️ **NON committare mai il file `.env`**
 
 ---
 
@@ -163,9 +161,6 @@ ProxPortal comunica con Proxmox tramite:
     GET /nodes/{node}/lxc/{vmid}/interfaces
     ```
 
-⚠️ **Non viene usato `exec` nei container**
-L’accesso SSH è garantito **solo tramite chiavi** (best practice).
-
 ---
 
 ## Profili di risorse
@@ -200,7 +195,6 @@ Le risorse vengono impostate **dinamicamente via API**, indipendenti dal templat
 ## Sicurezza
 
 * 🔐 Ogni container ha una **chiave SSH diversa**
-* 🔐 La chiave privata è mostrata **una sola volta**
 * 🔐 Nessuna password SSH condivisa
 * 🔐 Accesso Proxmox isolato nel backend
 * 🔐 Nessuna esecuzione di comandi remoti via API
@@ -214,19 +208,4 @@ Le risorse vengono impostate **dinamicamente via API**, indipendenti dal templat
 * Replication richiede configurazione manuale lato Proxmox
 
 ---
-
-## Possibili estensioni future
-
-* 🔄 Replicazione via SSH lato nodo
-* 📦 Backup automatici
-* 📊 Monitoraggio risorse
-* 👥 Multi-tenant avanzato
-* 🔑 Rotazione chiavi SSH
-
----
-
-## Licenza
-
-Progetto didattico / accademico.
-Uso libero per studio e sperimentazione.
 
