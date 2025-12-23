@@ -36,6 +36,9 @@ class ProxmoxService
         ],
     ];
 
+    /**
+     * creazione URL base API Proxmox
+     */
     public function __construct()
     {
         $this->baseUrl = sprintf(
@@ -46,6 +49,9 @@ class ProxmoxService
         );
     }
 
+    /**
+     *  autenticazione  Proxmox ritorna l’istanza del servizio
+     */
     public function connect(): self
     {
         $this->ensureAuthenticated();
@@ -53,12 +59,18 @@ class ProxmoxService
         return $this;
     }
 
+    /**
+     * restituisce la lista dei nodi disponibili nel cluster Proxmox
+     */
     public function listNodes(): array
     {
         return $this->get('nodes');
     }
 
-
+    /**
+     * creazione container LXC su Proxmox in base al profilo richiesto e parametri del .env
+     * ritorna le info che servono al utente per accedere all lxc
+     */
     public function provisionLxc(ServiceRequest $serviceRequest): array
     {
         $this->validateConfiguration();
@@ -117,6 +129,9 @@ class ProxmoxService
 
     }
 
+    /**
+     * controllo info Proxmox obbligatorie
+     */
     protected function validateConfiguration(): void
     {
         if (! env('PROXMOX_TEMPLATE')) {
@@ -128,6 +143,9 @@ class ProxmoxService
         }
     }
 
+    /**
+     * prende il  VMID disponibile dal cluster Proxmox
+     */
     protected function nextVmid(): int
     {
         $response = $this->get('cluster/nextid');
@@ -141,6 +159,9 @@ class ProxmoxService
         return (int) (200 + ($response ?? random_int(1, 500)));
     }
 
+    /**
+     * prova a molte volte di recuperare l’indirizzo IP del container appena creato
+     */
     protected function fetchIpAddress(string $node, int $vmid, int $attempts = 10, int $waitSeconds = 5): ?string
     {
         for ($i = 0; $i < $attempts; $i++) {
@@ -158,6 +179,9 @@ class ProxmoxService
         return null;
     }
 
+    /**
+     * aggiorna ip
+     */
     public function refreshIp(ServiceRequest $serviceRequest): void
     {
         if ($serviceRequest->status !== ServiceRequest::STATUS_APPROVED) {
@@ -185,6 +209,9 @@ class ProxmoxService
         }
     }
 
+    /**
+     * prende l’indirizzo IP del container guardando le interfacce
+     */
     protected function getIpAddressFromProxmox(string $node, int $vmid): ?string
     {
         try {
@@ -217,6 +244,9 @@ class ProxmoxService
         return null;
     }
 
+    /**
+     * recupera ticket e token CSRF per l'accesso alle api2 proxmox
+     */
     protected function ensureAuthenticated(): void
     {
         if ($this->ticket && $this->csrf) {
@@ -236,6 +266,9 @@ class ProxmoxService
         $this->csrf = $response['CSRFPreventionToken'] ?? null;
     }
 
+    /**
+     * esegue  richiesta GET con ticket verso l’API
+     */
     protected function get(string $path, array $query = [])
     {
         $this->ensureAuthenticated();
@@ -248,7 +281,9 @@ class ProxmoxService
         return $this->parseData($response);
     }
 
-
+    /**
+     * esegue una richiesta POST con ticket verso l’API
+     */
     protected function post(string $path, array $payload = []): array
     {
         $this->ensureAuthenticated();
@@ -262,6 +297,9 @@ class ProxmoxService
         return $this->parseData($response);
     }
 
+    /**
+     * sistema la risposta API  restituendo  un array
+     */
     protected function parseData(\Illuminate\Http\Client\Response $response): array
     {
         $data = $response->json('data');
@@ -277,6 +315,9 @@ class ProxmoxService
         return [];
     }
 
+    /**
+     * crea gli header HTTP necessari come ticket e csrf per richieste api
+     */
     protected function headers(bool $write = false): array
     {
         $headers = [
@@ -290,6 +331,9 @@ class ProxmoxService
         return $headers;
     }
 
+    /**
+     * ritorno client HTTP preconfigurato per comunicare con api
+     */
     protected function httpClient(): \Illuminate\Http\Client\PendingRequest
     {
         return Http::withOptions([
@@ -299,6 +343,9 @@ class ProxmoxService
         ]);
     }
 
+    /**
+     * crea  coppia di chiavi SSH ed25519 per passare al template
+     */
     protected function generateSshKeyPair(int $requestId): array
     {
         $dir = storage_path('app/ssh_keys');
