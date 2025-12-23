@@ -1,4 +1,3 @@
-````md
 # ProxPortal
 
 ProxPortal è un **portale di provisioning automatico di container LXC su Proxmox VE**, pensato per gestire richieste utenti, approvazioni amministrative e creazione sicura di container con **chiavi SSH uniche per ogni utente**.
@@ -231,11 +230,3 @@ Le risorse vengono impostate **dinamicamente via API**, indipendenti dal templat
 Progetto didattico / accademico.
 Uso libero per studio e sperimentazione.
 
-```
-
-Se vuoi, al prossimo passo posso:
-- rifinire il README per **consegna scolastica**
-- aggiungere **diagramma del flusso**
-- scrivere **sezione “Scelte progettuali”**
-- fare **review sicurezza finale**
-```
