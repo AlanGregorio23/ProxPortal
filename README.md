@@ -25,7 +25,7 @@ Il progetto nasce come **pannello di accesso semplificato** sopra Proxmox, con l
 - Composer
 - Node.js + npm
 - MySQL / MariaDB
-- Proxmox VE (testato con Proxmox 8 / API v2)
+- Proxmox VE (testato con Proxmox 9 / API v2)
 - Accesso API Proxmox (utente `root@pam` o dedicato)
 
 ---
