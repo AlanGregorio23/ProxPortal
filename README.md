@@ -21,7 +21,7 @@ Il progetto nasce come **pannello di accesso semplificato** sopra Proxmox, con l
 
 ## Requisiti
 
-- PHP >= 8.1
+- PHP >= 8.2
 - Composer
 - Node.js + npm
 - MySQL / MariaDB
